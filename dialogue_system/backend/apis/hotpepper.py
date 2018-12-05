@@ -23,7 +23,8 @@ class HotPepperGourmetAPI(object):
         response = response.json()
         return response
 
-    def search_restaurant(self, area, food, budget):
+    # def search_restaurant(self, area, food, budget):
+    def search_restaurant(self, area, food):
         # 指定するリクエストパラメータ
         # key, small_area, food, budget
         area_code = self.area_name2area_code(keyword=area)

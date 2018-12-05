@@ -13,16 +13,16 @@ class LanguageGenerator(object):
             sent += '場所は{0}ですね。'.format(dialogue_act['LOCATION'])
         if 'GENRE' in dialogue_act:
             sent += '{0}ですね。'.format(dialogue_act['GENRE'])
-        if 'MAXIMUM_AMOUNT' in dialogue_act:
-            sent += '予算は{0}円ですね。'.format(dialogue_act['MAXIMUM_AMOUNT'])
+        # if 'MAXIMUM_AMOUNT' in dialogue_act:
+        #     sent += '予算は{0}円ですね。'.format(dialogue_act['MAXIMUM_AMOUNT'])
 
         sys_act_type = dialogue_act['sys_act_type']
         if sys_act_type == 'REQUEST_LOCATION':
             sent += '場所はどのあたりですか？'
         elif sys_act_type == 'REQUEST_GENRE':
             sent += '料理のジャンルを教えてください。'
-        elif sys_act_type == 'REQUEST_BUDGET':
-            sent += '予算の上限はどのくらいですか？'
+        # elif sys_act_type == 'REQUEST_BUDGET':
+        #     sent += '予算の上限はどのくらいですか？'
         elif sys_act_type == 'CHAT':
             sent += dialogue_act['utt']
         elif sys_act_type == 'INFORM_RESTAURANT':

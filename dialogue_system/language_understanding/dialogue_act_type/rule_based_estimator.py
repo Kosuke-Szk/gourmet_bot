@@ -11,7 +11,7 @@ class RuleBasedDialogueActTypeEstimator(object):
             return 'INFORM_GENRE'
         elif attribute['LOCATION'] != '':
             return 'INFORM_LOC'
-        elif attribute['MAXIMUM_AMOUNT'] != '':
-            return 'INFORM_MONEY'
+        # elif attribute['MAXIMUM_AMOUNT'] != '':
+        #     return 'INFORM_MONEY'
         else:
             return 'OTHER'

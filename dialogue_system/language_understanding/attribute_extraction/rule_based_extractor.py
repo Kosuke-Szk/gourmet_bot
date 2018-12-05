@@ -13,8 +13,8 @@ class RuleBasedAttributeExtractor(object):
         self.__genres = read_genres()
 
     def extract(self, text):
-        attribute = {'LOCATION': self.__extract_location(text), 'GENRE': self.__extract_genre(text),
-                     'MAXIMUM_AMOUNT': self.__extract_budget(text)}
+        # attribute = {'LOCATION': self.__extract_location(text), 'GENRE': self.__extract_genre(text),　'MAXIMUM_AMOUNT': self.__extract_budget(text)}
+        attribute = {'LOCATION': self.__extract_location(text), 'GENRE': self.__extract_genre(text)}
 
         return attribute
 

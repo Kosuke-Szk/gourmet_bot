@@ -24,13 +24,14 @@ class DialogueManager(object):
             sys_act['sys_act_type'] - 'REQUEST_LOCATION'
         elif not self.dialogue_state.has('GENRE'):
             sys_act['sys_act_type'] - 'REQUEST_GENRE'
-        elif not self.dialogue_state.has('MAXIMUM_AMOUNT'):
-            sys_act['sys_act_type'] - 'REQUEST_BUDGET'
+        # elif not self.dialogue_state.has('MAXIMUM_AMOUNT'):
+        #     sys_act['sys_act_type'] - 'REQUEST_BUDGET'
         else:
             api = HotPepperGourmetAPI()
             area = self.dialogue_state.get_food()
-            budget = self.dialogue_state.get_budget()
-            restaurant = api.search_restaurant(area=area, food=food, budget=budget)
+            # budget = self.dialogue_state.get_budget()
+            # restaurant = api.search_restaurant(area=area, food=food, budget=budget)
+            restaurant = api.search_restaurant(area=area, food=food)
             sys_act['sys_act_type'] = 'INFORM_RESTAURANT'
             sys_act['restaurant'] = restaurant
             self.dialogue_state.clear()
