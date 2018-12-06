@@ -21,6 +21,5 @@ def food(message, something):
     text, ts, user_id = body['text'], body['ts'], body['user']
     bot = create_or_read(user_id)
     reply_message = bot.reply(text)
-    print('reply', reply_message)
     save_bot(bot, user_id)
     message.reply(reply_message)
