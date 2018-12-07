@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import os
+import sys
 from gensim import corpora
 from modules.LanguageUnderstanding.utils.utils import *
 from sklearn.ensemble import RandomForestClassifier
@@ -37,12 +39,12 @@ def sent2features_(sent):
 
 if __name__ == '__main__':
     import os
+    import sys
     import pickle
     import random
 
     f = lambda path: os.path.dirname(path)
-
-    root_dir = f(f(f(f(__file__))))
+    root_dir = f(f(f(f(os.path.abspath(sys.argv[0])))))
     training_data_dir = os.path.join(root_dir, 'training_data')
     sents = []
     labels = []

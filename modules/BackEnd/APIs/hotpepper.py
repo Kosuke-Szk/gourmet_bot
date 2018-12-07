@@ -55,24 +55,6 @@ class HotPepperGourmetAPI(object):
 
         return food_code
 
-    def to_budget_code(self, user_budget):
-        response = self.__search('budget')
-        for budget in response['results']['budget']:
-            name, code = budget['name'], budget['code']
-            name = name.replace('円', '')
-            if name.startswith('～'):
-                upper = name.replace('～', '')
-                if int(user_budget) <= int(upper):
-                    return code
-            elif name.endswith('～'):
-                lower = name.replace('～', '')
-                if int(user_budget) >= int(lower):
-                    return code
-            else:
-                _, upper = name.split('～')
-                if int(user_budget) <= int(upper):
-                    return code
-
     def search_food(self, **kwargs):
         # keyword 完全一致を優先させる
         response = self.__search('food', **kwargs)

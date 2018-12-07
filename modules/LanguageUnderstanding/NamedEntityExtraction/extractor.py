@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 from itertools import chain
 import pycrfsuite
 from sklearn.metrics import classification_report
@@ -7,9 +8,6 @@ from sklearn.preprocessing import LabelBinarizer
 class NamedEntityExtractor(object):
 
     def __init__(self, model_file='model.crfsuite'):
-        """
-        :param model_file: str
-        """
         self.__tagger = pycrfsuite.Tagger()
         try:
             file_path = os.path.join(os.path.dirname(__file__), model_file)
@@ -18,30 +16,19 @@ class NamedEntityExtractor(object):
             print('Learn')
 
     def train(self, train_x, train_y, save_file='model.crfsuite'):
-        """
-        :param train_x:
-        :param train_y:
-        :param save_file: str
-        :return:
-        """
         trainer = pycrfsuite.Trainer(verbose=False)
         for xseq, yseq in zip(train_x, train_y):
             trainer.append(xseq, yseq)
         trainer.set_params({
-            'c1': 1.0,
-            'c2': 1e-3,
-            'max_iterations': 50,
-            'feature.possible_translations': True
+            'c1': 1.0,   # coefficient for L1 penalty
+            'c2': 1e-3,  # coefficient for L2 penalty
+            'max_iterations': 50,  # stop earlier
+            'feature.possible_transitions': True
         })
         trainer.train(save_file)
         self.__tagger.open(save_file)
 
     def extract(self, xseq, sent):
-        """
-        :param xseq:
-        :param sent:
-        :return:
-        """
         """
         千葉でラーメンを食べる
         -> [['LOC', '千葉'], ['GENRE', 'ラーメン']]
@@ -50,11 +37,11 @@ class NamedEntityExtractor(object):
         res = []
         i = 0
         while i < len(pred_y):
-            if pred_y[i].startwith('B'):
+            if pred_y[i].startswith('B'):
                 word_stack = [sent[i][0]]
                 label_stack = [pred_y[i]]
                 i += 1
-                while i < len(pred_y) and pred_y[i].startwith('I'):
+                while i < len(pred_y) and pred_y[i].startswith('I'):
                     word_stack = [sent[i][0]]
                     label_stack = [pred_y[i]]
                     i += 1
@@ -65,7 +52,7 @@ class NamedEntityExtractor(object):
 
         return res
 
-    def tagger(self, seq):
+    def tagger(self, xseq):
         return self.__tagger.tag(xseq)
 
     def evaluate(self, y_true, y_pred):
@@ -75,7 +62,7 @@ class NamedEntityExtractor(object):
 
         tagset = set(lb.classes_) - {'O'}
         tagset = sorted(tagset, key=lambda tag: tag.split('-', 1)[::-1])
-        class_indices= {cls: idx for idx, cls in enumerate(lb.classes_)}
+        class_indices = {cls: idx for idx, cls in enumerate(lb.classes_)}
 
         return classification_report(
             y_true_combined,
@@ -84,14 +71,16 @@ class NamedEntityExtractor(object):
             target_names=tagset,
         )
 
+
 if __name__ == '__main__':
     import os
+    import sys
     import pickle
     import random
     from modules.LanguageUnderstanding.utils.utils import sent2features, sent2labels
     f = lambda path: os.path.dirname(path)
 
-    root_dir = f(f(f(f(__file__))))
+    root_dir = f(f(f(f(os.path.abspath(sys.argv[0])))))
     training_data_dir = os.path.join(root_dir, 'training_data')
     training_data = []
 
